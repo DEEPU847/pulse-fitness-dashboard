@@ -6,11 +6,11 @@ import {
   Trophy, X, Pencil, Trash2, Footprints, Bike, Waves, HeartPulse, Zap, Sun, Moon
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { api, getToken } from './api.js';
+import { api, getToken, DEMO_MODE } from './api.js';
 import { GoogleLogin } from '@react-oauth/google';
 
-const today = () => new Date().toISOString().slice(0, 10);
 const localDayKey = (date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+const today = () => localDayKey(new Date());
 const localMonthKey = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; };
 const initialForm = (defaultType = 'Cardio') => ({ exercise: '', type: defaultType, duration: 30, date: today(), calories: 220, notes: '' });
 const prettyDate = (date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -178,7 +178,7 @@ function App() {
   function openEdit(workout) {
     setEditing(workout._id);
     setForm({ exercise: workout.exercise, type: workout.type, duration: workout.duration,
-      date: new Date(workout.date).toISOString().slice(0,10), calories: workout.calories, notes: workout.notes || '' });
+      date: localDayKey(new Date(workout.date)), calories: workout.calories, notes: workout.notes || '' });
     setModalOpen(true);
   }
   async function saveWorkout(e) {
@@ -254,7 +254,7 @@ function App() {
       <main className="main-content">
         <header className="topbar">
           <div className="breadcrumb"><span>Workspace</span><span className="crumb-slash">/</span><b>{activeNav}</b></div>
-          <div className="topbar-right"><span className="today-pill"><span className="status-dot"/>{new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</span><button className="icon-button theme-toggle" title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Moon size={18}/> : <Sun size={18}/>}</button><button className="icon-button notification" title="Notifications" onClick={() => setNotice('You’re all caught up!')}><Bell size={19}/><i/></button></div>
+          <div className="topbar-right">{DEMO_MODE&&<span className="demo-pill">Local demo · saves in this browser</span>}<span className="today-pill"><span className="status-dot"/>{new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</span><button className="icon-button theme-toggle" title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Moon size={18}/> : <Sun size={18}/>}</button><button className="icon-button notification" title="Notifications" onClick={() => setNotice('You’re all caught up!')}><Bell size={19}/><i/></button></div>
         </header>
 
         <div className="page-wrap">
@@ -424,7 +424,7 @@ function StatCard({label,value,icon:Icon,tone,change,trend,progress}) {
 
 function AuthScreen({mode,setMode,form,setForm,onSubmit,onGoogleSuccess,onGoogleError,busy,error}) {
   return <div className="auth-page"><div className="auth-art"><a className="brand auth-brand" href="#"><span className="brand-mark"><Activity size={23} strokeWidth={2.8}/></span><span>pulse<span className="brand-dot">.</span></span></a><div className="art-copy"><span className="art-tag"><Sparkles size={14}/> YOUR JOURNEY STARTS HERE</span><h1>Stronger every day.<br/><em>Better in every way.</em></h1><p>A little progress each day adds up to big results. Track your movement, celebrate your wins, and keep going.</p><div className="art-stats"><div><strong>01</strong><span>Show up</span></div><i/><div><strong>02</strong><span>Keep moving</span></div><i/><div><strong>03</strong><span>Feel stronger</span></div></div></div><div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/><div className="art-bottom"><span><Activity size={15}/> Your pace. Your progress.</span><span>Made for everyday wins.</span></div></div>
-    <div className="auth-side"><div className="auth-mobile-brand"><span className="brand-mark"><Activity size={20}/></span> pulse.</div><div className="auth-box"><div className="auth-heading"><span className="auth-kicker">{mode==='login'?'WELCOME BACK':'GET STARTED'}</span><h2>{mode==='login'?'Good to see you again.':'Create your account.'}</h2><p>{mode==='login'?'Pick up where you left off. Your progress is waiting.':'Start your fitness journey with a plan that feels like you.'}</p></div>
+    <div className="auth-side"><div className="auth-mobile-brand"><span className="brand-mark"><Activity size={20}/></span> pulse.</div><div className="auth-box"><div className="auth-heading"><span className="auth-kicker">{mode==='login'?'WELCOME BACK':'GET STARTED'}</span><h2>{mode==='login'?'Good to see you again.':'Create your account.'}</h2><p>{mode==='login'?'Pick up where you left off. Your progress is waiting.':'Start your fitness journey with a plan that feels like you.'}</p>{DEMO_MODE&&<p className="demo-hint">Demo login: demo@pulse.fit · pulse1234</p>}</div>
       <form onSubmit={onSubmit} className="auth-form">{mode==='register'&&<label>Full name<div className="field-wrap"><input required maxLength="80" autoComplete="name" placeholder="Alex Morgan" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/></div></label>}
         <label>Email address<div className="field-wrap"><input required type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/></div></label>
         <label>Password<div className="field-wrap"><input required minLength="8" type="password" autoComplete={mode==='login'?'current-password':'new-password'} placeholder="At least 8 characters" value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/></div></label>

@@ -96,3 +96,4 @@ tbody tr{animation:row-enter .35s ease both}tbody tr:hover{background:#f8fbf5} [
 [data-theme="dark"] .goal-ring{background:conic-gradient(var(--accent) var(--progress),#2c382b 0)}
 [data-theme="dark"] .daily-summary{background:color-mix(in srgb,var(--accent) 16%,#1a231a);border-color:color-mix(in srgb,var(--accent) 35%,#1a231a);color:color-mix(in srgb,var(--accent) 60%,white)}
 [data-theme="dark"] .upgrade-icon,[data-theme="dark"] .goal-day.done i{background:color-mix(in srgb,var(--accent) 18%,#1a231a);color:color-mix(in srgb,var(--accent) 55%,white)}
+.demo-hint{margin-top:10px!important;padding:9px 11px;border-radius:8px;background:#f1f7ec;color:#547d3d!important;font-size:11px!important}.demo-pill{padding:7px 10px;border:1px solid #dce9d2;border-radius:999px;background:#f5faef;color:#5f8f43;font-size:10px;font-weight:700;white-space:nowrap}

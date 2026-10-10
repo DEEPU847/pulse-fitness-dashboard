@@ -31,6 +31,12 @@ npm install
 npm run install:all
 ```
 
+## Quick prototype (no MongoDB required)
+
+Run `npm run dev` from the project root and open http://localhost:5173. With no `VITE_API_URL` set, the client starts in local demo mode. Sign in with `demo@pulse.fit` / `pulse1234`, or create an account. Sample workouts are included, and your edits are saved in this browser using local storage. Use **Log out** to return to the sign-in screen.
+
+To use the real MongoDB API instead, create `client/.env` with `VITE_API_URL=http://localhost:5000/api`, configure `server/.env` as described below, then restart the dev servers.
+
 ## 2. Configure backend
 Copy `server/.env.example` to `server/.env` and set `MONGO_URI` and a long random `JWT_SECRET`.
 
